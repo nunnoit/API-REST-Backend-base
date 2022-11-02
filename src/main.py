@@ -37,7 +37,6 @@ from src.models import User
 from src.routes import signup
 
 
-
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
