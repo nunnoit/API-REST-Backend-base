@@ -1,7 +1,7 @@
 import os
 from ..main import request, jsonify, app, bcrypt
 from ..db import db
-from ..models import User
+from ..models import User, Planets, Favorite_Planets
 from flask import Flask, url_for
 from datetime import datetime
 import json

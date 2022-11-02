@@ -1,36 +1,36 @@
 import os
 from ..main import request, jsonify, app, bcrypt
 from ..db import db
-from ..models import User
+from ..models import User, Character, Favorite_Character
 from flask import Flask, url_for
 from datetime import datetime
 import json
 
 
-# Endpoint get all people
-@app.route('/people', methods=['GET'])
-def get_people():
-    peoples = People.query.all()
+# Endpoint get all Characters
+@app.route('/characters', methods=['GET'])
+def get_character():
+    characters = Character.query.all()
     #print(users)
-    peoples = list(map(lambda people: people.serialize(), peoples))
+    haracters = list(map(lambda character: character.serialize(), characters))
     #print(users)
-    return jsonify(peoples), 200
+    return jsonify(characters), 200
 
-# Endpoint get people by id
-@app.route('/people/<int:people_id>', methods=['GET'])
-def get_people_by_id(people_id):
-    if people_id == 0:
+# Endpoint get Character by id
+@app.route('/character/<int:character_id>', methods=['GET'])
+def get_character_by_id(character_id):
+    if character_id == 0:
         raise APIException("Error: id cannot be equal to 0", status_code=400)
-    person = People.query.get(people_id)
-    if person == None:
+    character = Character.query.get(character_id)
+    if character == None:
         raise APIException("Error: Username does not exist", status_code=400)
-    return jsonify(person.serialize()), 200
+    return jsonify(character.serialize()), 200
 
 
 
-# Endpoint post people
-@app.route('/people', methods=['POST'])
-def create_new_person():
+# Endpoint create new Character
+@app.route('/character', methods=['POST'])
+def create_new_character():
     body = request.get_json()
     # Validations
     if body is None:
@@ -38,9 +38,9 @@ def create_new_person():
     if body['name'] is None or body['name'] == "":
         raise APIException("Error: name is invalid", status_code=400)
 
-    new_character = People(name=body['name'], height=body['height'], mass=body['mass'], hair_color=body['hair_color'], skin_color=body['skin_color'],
+    new_character = Character(name=body['name'], height=body['height'], mass=body['mass'], hair_color=body['hair_color'], skin_color=body['skin_color'],
                            eye_color=body['eye_color'], birth_year=body['birth_year'], gender=body['gender'], homeworld=body['homeworld'])
-    characters = People.query.all()
+    characters = Character.query.all()
     characters = list(map(lambda character: character.serialize(), characters))
 
     print(new_character)
@@ -52,12 +52,12 @@ def create_new_person():
 
 
 
-# Endpoint delete people by id
-@app.route('/people/<int:item_id>', methods=['DELETE'])
+# Endpoint delete Character by id
+@app.route('/character/<int:item_id>', methods=['DELETE'])
 def delete_character_by_id(item_id):
     if item_id == 0:
         raise APIException("Error: id cannot be equal to 0", status_code=400)
-    character = People.query.get(item_id)
+    character = Character.query.get(item_id)
     if character == None:
         raise APIException("Error: character does not exist", status_code=400)
     db.session.delete(character)
@@ -66,12 +66,12 @@ def delete_character_by_id(item_id):
 
 
 
-# Endpoint DELETE drom FAVORITE people
-@app.route('/favorites/people/<int:item_id>', methods=['DELETE'])
+# Endpoint DELETE drom FAVORITE Character
+@app.route('/favorites/character/<int:item_id>', methods=['DELETE'])
 def delete_favorite_character_by_id(item_id):
     if item_id == 0:
         raise APIException("Error: id cannot be equal to 0", status_code=400)
-    item = People.query.get(item_id)
+    item = Character.query.get(item_id)
     if item == None:
         raise APIException("Error: character does not exist", status_code=400)
     db.session.delete(item)
@@ -80,13 +80,13 @@ def delete_favorite_character_by_id(item_id):
 
 
 
-#Endpoint Update people
-@app.route('/people/<int:people_id>', methods=['PUT'])
-def put_people_by_id(people_id):
-    if people_id == 0:
+#Endpoint Update Character
+@app.route('/character/<int:character_id>', methods=['PUT'])
+def put_character_by_id(character_id):
+    if character_id == 0:
         raise APIException("Error: id cannot be equal to 0", status_code=400)
-    person = People.query.get(people_id)  
-    if person == None:
+    character = Character.query.get(character_id)  
+    if character == None:
         raise APIException("Error: Username does not exist", status_code=400)
     body = request.get_json()
     #Validation
@@ -94,22 +94,21 @@ def put_people_by_id(people_id):
         raise APIException("Error: body is empty", status_code=400)
     # Check for body if empty (request)
     if not body['name'] is None:
-        person.name = body['name']
+        character.name = body['name']
     db.session.commit()
-    return jsonify(person.serialize()), 200
+    return jsonify(character.serialize()), 200
 
 
 
-#Endpoint Search people
-@app.route('/people/search', methods=['POST'])
-def search_people():
+#Endpoint Search Character
+@app.route('/character/search', methods=['POST'])
+def search_character():
     body = request.get_json()
     #Validation
     if body is None:
         raise APIException("Error: body is empty", status_code=400)
     if not body['name'] is None:
-        # va a encontrar todas las coincidencias
-        found = People.query.filter(People.name == body['name']).all()
+        found = Character.query.filter(Character.name == body['name']).all()
         found = list(map(lambda item: item.serialize(), found))
         print(found)
     if found == None:

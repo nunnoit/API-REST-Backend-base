@@ -115,8 +115,8 @@ def get_all_users():
 
 
 
-# Endpoint post user
-@app.route('/user', methods=['POST'])
+# Endpoint Create new user
+@app.route('/registration', methods=['POST'])
 def create_new_user():
     body = request.get_json()
     #print(body['username'])

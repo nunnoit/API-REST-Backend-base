@@ -4,7 +4,7 @@ import os
 
 
 # Characters Table
-class People(db.Model):
+class Character(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     height = db.Column(db.Float)
@@ -15,7 +15,7 @@ class People(db.Model):
     birth_year = db.Column(db.Integer)
     gender = db.Column(db.String(250))
     homeworld = db.Column(db.String(250))
-    people_favorite = db.relationship("Favorite_People", backref="people")
+    character_favorite = db.relationship("Favorite_Character", backref="characters")
 
 # Serialize result
     def serialize(self):
@@ -33,14 +33,14 @@ class People(db.Model):
         }
 
 # Pivote Table: Characters-Favorites
-class Favorite_People(db.Model):
+class Favorite_Character(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    people_id = db.Column(db.Integer, db.ForeignKey('people.id'))
+    character_id = db.Column(db.Integer, db.ForeignKey('character.id'))
 
     def serialize(self):
         return {
             "id": self.id,
             "user_email": User.query.get(self.user_id).serialize()['email'],
-            "character_name": People.query.get(self.people_id).serialize()['name']          
+            "character_name": Character.query.get(self.character_id).serialize()['name']          
         }

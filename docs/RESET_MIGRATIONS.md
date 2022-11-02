@@ -12,3 +12,10 @@ Sometimes the migration folder can get messed up, its really hard to fix some of
 4. Initiallize the migrations again: `pipenv run init`
 5. Create the migration files again: `pipenv run migrate`
 6. Apply the migration files into your database `pipenv run upgrade`
+
+
+
+
+# Automation
+
+pipenv run reset_db
