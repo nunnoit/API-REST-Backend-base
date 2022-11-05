@@ -1,10 +1,10 @@
 import os
 from ..main import request, jsonify, app, bcrypt
 from ..db import db
-from ..models import User
+from ..models import User, TokenBlockedList
 from flask import Flask, url_for
-from flask_jwt_extended import jwt_required, create_access_token
-from datetime import datetime
+from flask_jwt_extended import jwt_required, create_access_token, get_jwt
+from datetime import datetime, timezone
 import json
 
 #Endpoint User register
@@ -71,7 +71,7 @@ def login():
 @app.route('/logout', methods=['get'])
 @jwt_required()
 def logout():
-    print(get_jwt())
+    # print(get_jwt())
     jti = get_jwt()["jti"]
     now = datetime.now(timezone.utc)
 
