@@ -3,7 +3,7 @@ from ..main import request, jsonify, app, bcrypt
 from ..db import db
 from ..models import User
 from flask import Flask, url_for
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, create_access_token
 from datetime import datetime
 import json
 
