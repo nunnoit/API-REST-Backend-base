@@ -185,3 +185,29 @@ def delete_user_by_id(user_id):
     db.session.delete(user)
     db.session.commit()
     return jsonify("The user deleted successfully"), 200
+
+
+@app.route('/user/favorites', methods=['GET'])
+def get_favorites():
+    favorite_person = Favorite_Person.query.all()
+    favorite_person = list(map( lambda favorite_person: favorite_person.serialize(), favorite_persons))
+    favorite_planet = Favorite_Planet.query.all()
+    favorite_planet = list(map( lambda favorite_planet: favorite_planet.serialize(), favorite_planets))
+    favorite_vehicle = Favorite_Vehicle.query.all()
+    favorite_vehicle = list(map( lambda favorite_vehicle: favorite_vehicle.serialize(), favorite_vehicles))
+    favorites_list =  favorite_person + favorite_planet + favorite_vehicle
+    print(favorites_list)
+    return jsonify(favorites_list), 200
+
+
+# Endpoint protected user list
+@app.route('/user-list', methods=['get'])
+@jwt_required()
+def get_all_user_list():
+    users = User.query.all() #Objeto de SQLAlchemy
+    users = list(map(lambda item: item.serialize(), users))
+
+    response_body={
+        "lista": users
+    }
+    return jsonify(response_body), 200
